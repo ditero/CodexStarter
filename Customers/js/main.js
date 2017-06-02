@@ -67,7 +67,7 @@ var draw = function(dataTypes) {
 var chart = new CanvasJS.Chart("chartContainer",
 {
   title:{
-    text: "DJE Relationship Graph",
+    text: "JDE Relationship Graph",
     verticalAlign: 'top',
     horizontalAlign: 'center'
   },
@@ -78,13 +78,14 @@ var chart = new CanvasJS.Chart("chartContainer",
     startAngle:20,
     toolTipContent: "{label}: {y} - <strong>#percent%</strong>",
     indexLabel: "{label} #percent%",
+    showInLegend: true,
     dataPoints: [
-      {  y: dataTypes.opportunity, label: "Opportunity" },
-      {  y: dataTypes.customers, label: "Customers" },
-      {  y: dataTypes.warehouse, label: "Warehouse" },
-      {  y: dataTypes.suppliers,  label: "Suppliers"},
-      {  y: dataTypes.prospect,  label: "Prospect"},
-      {  y: dataTypes.competitor,  label: "Competitor"},
+      {  y: dataTypes.opportunity, label: "Opportunity",legendText: "O: Opportunity"},
+      {  y: dataTypes.customers, label: "Customers", legendText: "C: Customers"},
+      {  y: dataTypes.warehouse, label: "Warehouse", legendText: "W: Warehouse"},
+      {  y: dataTypes.suppliers,  label: "Suppliers", legendText: "V: Suppliers"},
+      {  y: dataTypes.prospect,  label: "Prospect", legendText: "P: Prospect"},
+      {  y: dataTypes.competitor,  label: "Competitor", legendText: "D: Competitor"},
     ]
   }
   ]
