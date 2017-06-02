@@ -1,11 +1,98 @@
 var myTemplate = document.querySelector('.myTemplate');
 var compiledTemplate = Handlebars.compile(myTemplate.innerHTML);
 var display = document.getElementById('display');
+// var radioPointer = document.querySelector("input[name='pointer']");
+var searchTypes = document.querySelector('.searchTypes');
+
+var newRec = [];
+var customerData = {};
+var record = [];
+var types = {};
+
+var filterTypes = function(types){
+  var filteredData = [];
+  for (var i = 0; i < record.length; i++) {
+    if (record[i].F0101_AT1 === types.value) {
+      newRec = record[i];
+      filteredData.push(record[i]);
+    }
+    else if (types.value === 'All') {
+            filteredData.push(record[i]);
+    }
+  }
+  var results = compiledTemplate({customerData: filteredData })
+  display.innerHTML = results;
+}
+
+
+var countTypes = function(){
+  var numOfOs = 0;
+  var numOfCs = 0;
+  var numOfWs = 0;
+  var numOfVs = 0;
+  var numOfPs = 0;
+  var numOfDs = 0;
+
+  for (var i = 0; i < record.length; i++) {
+    if (record[i].F0101_AT1 === 'O') {
+       numOfOs++;
+    }
+    else if (record[i].F0101_AT1 === 'C') {
+        numOfCs++;
+    }
+    else if (record[i].F0101_AT1 === 'W') {
+        numOfWs++;
+    }
+    else if (record[i].F0101_AT1 === 'V') {
+        numOfVs++;
+    }
+    else if (record[i].F0101_AT1 === 'P') {
+        numOfPs++;
+    }
+    else if (record[i].F0101_AT1 === 'D') {
+        numOfDs++;
+    }
+  }
+  return types = {
+    opportunity: numOfOs,
+    customers: numOfCs,
+    warehouse: numOfWs,
+    suppliers: numOfVs,
+    prospect: numOfPs,
+    competitor:numOfDs
+  };
+}
+
+var draw = function(dataTypes) {
+var chart = new CanvasJS.Chart("chartContainer",
+{
+  title:{
+    text: "DJE Relationship Graph",
+    verticalAlign: 'top',
+    horizontalAlign: 'center'
+  },
+              animationEnabled: true,
+  data: [
+  {
+    type: "doughnut",
+    startAngle:20,
+    toolTipContent: "{label}: {y} - <strong>#percent%</strong>",
+    indexLabel: "{label} #percent%",
+    dataPoints: [
+      {  y: dataTypes.opportunity, label: "Opportunity" },
+      {  y: dataTypes.customers, label: "Customers" },
+      {  y: dataTypes.warehouse, label: "Warehouse" },
+      {  y: dataTypes.suppliers,  label: "Suppliers"},
+      {  y: dataTypes.prospect,  label: "Prospect"},
+      {  y: dataTypes.competitor,  label: "Competitor"},
+    ]
+  }
+  ]
+});
+chart.render();
+}
 
 $(document).ready(function () { // wait for document to be ready
-  var newRec = [];
-  var customerData = {};
-  var  record = [];
 
     $.getJSON('js/grid_Data.js').done(function(data) {
 
@@ -21,16 +108,21 @@ $(document).ready(function () { // wait for document to be ready
 
 
       }
-      console.log(newRec[0]);
-      
+
+
 
       var dataResults = compiledTemplate({
         customerData: record
       })
       display.innerHTML = dataResults;
 
+      draw(countTypes());
+      searchTypes.addEventListener('change', function() {
+        console.log("radioPointer.value");
+        filterTypes(searchTypes);
+      });
     })
-
+// drawBoard(countTypes());
 
 });
 

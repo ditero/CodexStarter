@@ -16,7 +16,9 @@
   <link rel="stylesheet" href="css/main.css">
   <script src="js/vendor/modernizr-2.8.3.min.js"></script>
   <script src="handlebars-v4.0.5.js"></script>
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <!-- <script type="text/javascript" src="canvasjs.min.js"></script> -->
+    <script type="text/javascript" src="jquery.canvasjs.min.js"></script>
+  <!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> -->
 <!-- <script type="text/javascript"> -->
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.js"></script> -->
   <script type="text/x-handlebars-tamplate" class="myTemplate">
@@ -44,18 +46,34 @@
 
   <!-- Add your site or application content here -->
   <div class="container">
-    <h1 class="page-header">Customer Relationship Data <small>address Book</small></h1>
-    <div class="container radio">
-      <input type="radio" name="" value="C"> Customer (C)
-      <input type="radio" name="" value="O"> Opportunity (O)
-      <input type="radio" name="" value="P"> Prospect (P)
-      <input type="radio" name="" value="D">Competitor (D)
-      <input type="radio" name="" value="W">Warehouse (W)
-      <input type="radio" name="" value="V">Supplier (V)
+    <h1 class="page-header">Customer Relationship Data</h1>
+    <!--Div that will hold the dashboard-->
+    <div id="chartContainer" style="height: 300px; width: 100%; align-text: center;">
+
+    </div>
+    <div class="container">
+    <label for="searchTypes">Filter</label>  <select class="searchTypes" name="">
+        <option value="O">Opportunity</option>
+        <option value="P">Prospect</option>
+        <option value="C">Customer</option>
+        <option value="V">Supplier</option>
+        <option value="W">Warehouse</option>
+        <option value="D">Competitor</option>
+        <option value="All">Show All</option>
+      </select>
+      <!-- <div class="radio">
+        <input type="radio" name="pointer" value="C"> Customer (C)
+        <input type="radio" name="pointer" value="O"> Opportunity (O)
+        <input type="radio" name="pointer" value="P"> Prospect (P)
+        <input type="radio" name="pointer" value="D">Competitor (D)
+        <input type="radio" name="pointer" value="W">Warehouse (W)
+        <input type="radio" name="pointer" value="V">Supplier (V)
+
+      </div> -->
 
     </div>
     <hr>
-    <div id="display">
+    <div id="display" style="scroll: y">
     </div>
     <pre class="results">
     </pre>
@@ -68,6 +86,7 @@
   </script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/dashboard.js"></script>
   <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
   <script>
     (function(b, o, i, l, e, r) {
