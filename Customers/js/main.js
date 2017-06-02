@@ -9,23 +9,24 @@ var customerData = {};
 var record = [];
 var types = {};
 
-var filterTypes = function(types){
+var filterTypes = function(types) {
   var filteredData = [];
   for (var i = 0; i < record.length; i++) {
     if (record[i].F0101_AT1 === types.value) {
       newRec = record[i];
       filteredData.push(record[i]);
-    }
-    else if (types.value === 'All') {
-            filteredData.push(record[i]);
+    } else if (types.value === 'All') {
+      filteredData.push(record[i]);
     }
   }
-  var results = compiledTemplate({customerData: filteredData })
+  var results = compiledTemplate({
+    customerData: filteredData
+  })
   display.innerHTML = results;
 }
 
 
-var countTypes = function(){
+var countTypes = function() {
   var numOfOs = 0;
   var numOfCs = 0;
   var numOfWs = 0;
@@ -35,22 +36,17 @@ var countTypes = function(){
 
   for (var i = 0; i < record.length; i++) {
     if (record[i].F0101_AT1 === 'O') {
-       numOfOs++;
-    }
-    else if (record[i].F0101_AT1 === 'C') {
-        numOfCs++;
-    }
-    else if (record[i].F0101_AT1 === 'W') {
-        numOfWs++;
-    }
-    else if (record[i].F0101_AT1 === 'V') {
-        numOfVs++;
-    }
-    else if (record[i].F0101_AT1 === 'P') {
-        numOfPs++;
-    }
-    else if (record[i].F0101_AT1 === 'D') {
-        numOfDs++;
+      numOfOs++;
+    } else if (record[i].F0101_AT1 === 'C') {
+      numOfCs++;
+    } else if (record[i].F0101_AT1 === 'W') {
+      numOfWs++;
+    } else if (record[i].F0101_AT1 === 'V') {
+      numOfVs++;
+    } else if (record[i].F0101_AT1 === 'P') {
+      numOfPs++;
+    } else if (record[i].F0101_AT1 === 'D') {
+      numOfDs++;
     }
   }
   return types = {
@@ -59,71 +55,91 @@ var countTypes = function(){
     warehouse: numOfWs,
     suppliers: numOfVs,
     prospect: numOfPs,
-    competitor:numOfDs
+    competitor: numOfDs
   };
 }
 
 var draw = function(dataTypes) {
-var chart = new CanvasJS.Chart("chartContainer",
-{
-  title:{
-    text: "JDE Relationship Graph",
-    verticalAlign: 'top',
-    horizontalAlign: 'center'
-  },
-              animationEnabled: true,
-  data: [
-  {
-    type: "doughnut",
-    startAngle:20,
-    toolTipContent: "{label}: {y} - <strong>#percent%</strong>",
-    indexLabel: "{label} #percent%",
-    showInLegend: true,
-    dataPoints: [
-      {  y: dataTypes.opportunity, label: "Opportunity",legendText: "O: Opportunity"},
-      {  y: dataTypes.customers, label: "Customers", legendText: "C: Customers"},
-      {  y: dataTypes.warehouse, label: "Warehouse", legendText: "W: Warehouse"},
-      {  y: dataTypes.suppliers,  label: "Suppliers", legendText: "V: Suppliers"},
-      {  y: dataTypes.prospect,  label: "Prospect", legendText: "P: Prospect"},
-      {  y: dataTypes.competitor,  label: "Competitor", legendText: "D: Competitor"},
-    ]
-  }
-  ]
-});
-chart.render();
+  var chart = new CanvasJS.Chart("chartContainer", {
+    title: {
+      text: "JDE Relationship Graph",
+      verticalAlign: 'top',
+      horizontalAlign: 'center'
+    },
+    animationEnabled: true,
+    data: [{
+      type: "doughnut",
+      startAngle: 20,
+      toolTipContent: "{label}: {y} - <strong>#percent%</strong>",
+      indexLabel: "{label} #percent%",
+      showInLegend: true,
+      dataPoints: [{
+          y: dataTypes.opportunity,
+          label: "Opportunity",
+          legendText: "O: Opportunity"
+        },
+        {
+          y: dataTypes.customers,
+          label: "Customers",
+          legendText: "C: Customers"
+        },
+        {
+          y: dataTypes.warehouse,
+          label: "Warehouse",
+          legendText: "W: Warehouse"
+        },
+        {
+          y: dataTypes.suppliers,
+          label: "Suppliers",
+          legendText: "V: Suppliers"
+        },
+        {
+          y: dataTypes.prospect,
+          label: "Prospect",
+          legendText: "P: Prospect"
+        },
+        {
+          y: dataTypes.competitor,
+          label: "Competitor",
+          legendText: "D: Competitor"
+        },
+      ]
+    }]
+  });
+  chart.render();
 }
 
-$(document).ready(function () { // wait for document to be ready
+$(document).ready(function() { // wait for document to be ready
 
-    $.getJSON('js/grid_Data.js').done(function(data) {
+  $.getJSON('js/grid_Data.js').done(function(data) {
 
-      //console.log(data);
+    //console.log(data);
 
-      const resultsElem = document.querySelector('.results');  // <<- handle for results
-      // resultsElem.textContent = JSON.stringify(data.fs_DATABROWSE_F0101.data.gridData.rowset, null, 3);  // <<-  add data to DOM
+    const resultsElem = document.querySelector('.results'); // <<- handle for results
+    // resultsElem.textContent = JSON.stringify(data.fs_DATABROWSE_F0101.data.gridData.rowset, null, 3);  // <<-  add data to DOM
 
-      customerData = data.fs_DATABROWSE_F0101.data.gridData.rowset;
-      for (var i = 0; i < customerData.length; i++) {
-           record.push(customerData[i]);
-           newRec.push([record[i].F0101_AT1,record[i].F0101_ALPH]);
-
-
-      }
+    customerData = data.fs_DATABROWSE_F0101.data.gridData.rowset;
+    for (var i = 0; i < customerData.length; i++) {
+      record.push(customerData[i]);
+      newRec.push([record[i].F0101_AT1, record[i].F0101_ALPH]);
 
 
+    }
 
-      var dataResults = compiledTemplate({
-        customerData: record
-      })
-      display.innerHTML = dataResults;
 
-      draw(countTypes());
-      searchTypes.addEventListener('change', function() {
-        console.log("radioPointer.value");
-        filterTypes(searchTypes);
-      });
+
+    var dataResults = compiledTemplate({
+      customerData: record
     })
-// drawBoard(countTypes());
+    display.innerHTML = dataResults;
+
+    draw(countTypes());
+    searchTypes.addEventListener('change', function() {
+      console.log("radioPointer.value");
+      filterTypes(searchTypes);
+    });
+  })
+  // drawBoard(countTypes());
 
 });
 
